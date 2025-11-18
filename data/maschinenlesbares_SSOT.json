@@ -1,0 +1,493 @@
+{
+  "version": "1.1",
+  "template_id": "koerber_2025",
+  "description": "SSOT for Körber 2025 template with two layouts, typography, textbox behaviour and AI-friendly layout selection rules.",
+  "units": "cm",
+
+  "typography": {
+    "base_font_family": "Arial",
+    "sizes_pt": {
+      "title": 24,
+      "subtitle": 14,
+      "body": 16,
+      "footer": 9
+    },
+    "rules": {
+      "title_main": 24,
+      "subtitle_main": 14,
+      "content": 16,
+      "footer": 9
+    },
+    "text_box_defaults": {
+      "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+      "autofit": "none",
+      "wrap_text": true,
+      "vertical_alignment": "top"
+    }
+  },
+
+  "theme": {
+    "colors": {
+      "brand_blue_primary": {
+        "hex": "#0060FF",
+        "role": "accent"
+      },
+      "brand_white": {
+        "hex": "#FFFFFF",
+        "role": "background"
+      },
+      "brand_black": {
+        "hex": "#000000",
+        "role": "text"
+      },
+      "gray_01": {
+        "hex": "#F5F3F1",
+        "role": "background_subtle"
+      },
+      "gray_02": {
+        "hex": "#E6E2DC",
+        "role": "background_soft"
+      },
+      "gray_03": {
+        "hex": "#BFB8AF",
+        "role": "neutral_border"
+      }
+    }
+  },
+
+  "slide_size_cm": {
+    "width": 33.87,
+    "height": 19.05
+  },
+
+  "content_classification": {
+    "types": [
+      "title",
+      "text",
+      "bullets",
+      "image",
+      "chart",
+      "table",
+      "code"
+    ],
+    "attributes": {
+      "length_chars": "integer",
+      "length_words": "integer",
+      "media_ratio": "float_0_1",
+      "hierarchy_level": "integer_0_n",
+      "is_primary": "boolean",
+      "has_comparison_markers": "boolean",
+      "has_time_markers": "boolean"
+    },
+    "derived_features": {
+      "segment_count": "count of top-level content segments on a slide (e.g. problem vs solution = 2)",
+      "dominant_type": "type with highest visual and semantic weight (text|bullets|image|chart|table|code)",
+      "relation_type": "none|comparison|sequence|overview|problem_solution|before_after|pros_cons",
+      "total_chars": "sum of length_chars for all text/bullet items"
+    }
+  },
+
+  "slots": {
+    "title_main": {
+      "role": "title",
+      "type": "title",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "title_main",
+        "placeholder_type": "title"
+      },
+      "required": true,
+      "content_types_allowed": ["title"],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 24,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 0.93,
+        "y": 0.93,
+        "width": 32.0,
+        "height": 0.89
+      },
+      "max_chars": 80
+    },
+
+    "subtitle_main": {
+      "role": "subtitle",
+      "type": "text",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "subtitle_main",
+        "placeholder_type": "body"
+      },
+      "required": false,
+      "content_types_allowed": ["text"],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 14,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 0.93,
+        "y": 1.90,
+        "width": 32.0,
+        "height": 0.70
+      },
+      "max_chars": 80
+    },
+
+    "content_main": {
+      "role": "content",
+      "type": "text",
+      "pptx": {
+        "scope": "layout",
+        "layout_name": "content_single_main",
+        "shape_name": "content_main",
+        "placeholder_type": "body"
+      },
+      "required": true,
+      "content_types_allowed": [
+        "text",
+        "bullets",
+        "image",
+        "chart",
+        "table",
+        "code"
+      ],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 16,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 0.93,
+        "y": 3.82,
+        "width": 32.0,
+        "height": 13.0
+      },
+      "max_chars": 1200
+    },
+
+    "content_left": {
+      "role": "content",
+      "type": "text",
+      "pptx": {
+        "scope": "layout",
+        "layout_name": "content_two_column",
+        "shape_name": "content_left",
+        "placeholder_type": "body"
+      },
+      "required": true,
+      "content_types_allowed": [
+        "text",
+        "bullets",
+        "image",
+        "chart",
+        "table",
+        "code"
+      ],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 16,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 0.93,
+        "y": 3.82,
+        "width": 15.5,
+        "height": 13.0
+      },
+      "max_chars": 600
+    },
+
+    "content_right": {
+      "role": "content",
+      "type": "text",
+      "pptx": {
+        "scope": "layout",
+        "layout_name": "content_two_column",
+        "shape_name": "content_right",
+        "placeholder_type": "body"
+      },
+      "required": true,
+      "content_types_allowed": [
+        "text",
+        "bullets",
+        "image",
+        "chart",
+        "table",
+        "code"
+      ],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 16,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 17.43,
+        "y": 3.82,
+        "width": 15.5,
+        "height": 13.0
+      },
+      "max_chars": 600
+    },
+
+    "footer_logo": {
+      "role": "logo",
+      "type": "image",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "footer_logo",
+        "placeholder_type": null
+      },
+      "required": true,
+      "content_types_allowed": ["image"],
+      "geometry_cm": {
+        "x": 0.86,
+        "y": 17.26,
+        "width": 2.03,
+        "height": 1.20
+      }
+    },
+
+    "footer_text": {
+      "role": "footer",
+      "type": "text",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "footer_text",
+        "placeholder_type": "ftr"
+      },
+      "required": false,
+      "content_types_allowed": ["text"],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 9,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 4.17,
+        "y": 17.90,
+        "width": 23.66,
+        "height": 0.40
+      },
+      "max_chars": 80
+    },
+
+    "footer_date": {
+      "role": "date",
+      "type": "text",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "footer_date",
+        "placeholder_type": "dt"
+      },
+      "required": false,
+      "content_types_allowed": ["text"],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 9,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "left",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 27.94,
+        "y": 17.90,
+        "width": 3.40,
+        "height": 0.40
+      },
+      "format": "d MMMM yyyy"
+    },
+
+    "footer_page_number": {
+      "role": "page_number",
+      "type": "text",
+      "pptx": {
+        "scope": "master",
+        "shape_name": "footer_page_number",
+        "placeholder_type": "sldNum"
+      },
+      "required": false,
+      "content_types_allowed": ["text"],
+      "style": {
+        "font_family": "Arial",
+        "font_size_pt": 9,
+        "font_color_ref": "brand_black",
+        "horizontal_alignment": "right",
+        "vertical_alignment": "top",
+        "margins_cm": { "left": 0.0, "top": 0.0, "right": 0.0, "bottom": 0.0 },
+        "autofit": "none",
+        "wrap_text": true
+      },
+      "geometry_cm": {
+        "x": 31.44,
+        "y": 17.90,
+        "width": 1.50,
+        "height": 0.40
+      }
+    }
+  },
+
+  "layouts": [
+    {
+      "layout_id": "content_single_main",
+      "pptx_layout_name": "content_single_main",
+      "columns": 1,
+      "slots": [
+        { "slot_id": "title_main", "type": "title", "visual_weight": 0.2 },
+        { "slot_id": "subtitle_main", "type": "subtitle", "visual_weight": 0.1 },
+        { "slot_id": "content_main", "type": "content", "visual_weight": 0.7 },
+        { "slot_id": "footer_logo", "type": "logo" },
+        { "slot_id": "footer_text", "type": "footer" },
+        { "slot_id": "footer_date", "type": "date" },
+        { "slot_id": "footer_page_number", "type": "page_number" }
+      ],
+      "usage": {
+        "recommended_for": [ "single_story", "single_chart", "overview" ],
+        "discouraged_for": [ "explicit_comparison" ]
+      }
+    },
+    {
+      "layout_id": "content_two_column",
+      "pptx_layout_name": "content_two_column",
+      "columns": 2,
+      "slots": [
+        { "slot_id": "title_main", "type": "title", "visual_weight": 0.15 },
+        { "slot_id": "subtitle_main", "type": "subtitle", "visual_weight": 0.1 },
+        { "slot_id": "content_left", "type": "content", "visual_weight": 0.375 },
+        { "slot_id": "content_right", "type": "content", "visual_weight": 0.375 },
+        { "slot_id": "footer_logo", "type": "logo" },
+        { "slot_id": "footer_text", "type": "footer" },
+        { "slot_id": "footer_date", "type": "date" },
+        { "slot_id": "footer_page_number", "type": "page_number" }
+      ],
+      "usage": {
+        "recommended_for": [ "comparison", "before_after", "problem_solution", "pros_cons" ],
+        "discouraged_for": [ "long_single_story" ]
+      }
+    }
+  ],
+
+  "layout_selection": {
+    "feature_priority": [ "text_fit", "media_fit", "hierarchy" ],
+    "input_features": [ "segment_count", "dominant_type", "relation_type", "total_chars" ],
+    "rules": [
+      {
+        "rule_id": "prefer_two_column_for_comparison",
+        "condition": {
+          "segment_count_min": 2,
+          "segment_count_max": 2,
+          "relation_type_in": [ "comparison", "problem_solution", "before_after", "pros_cons" ]
+        },
+        "layout_scores": {
+          "content_two_column": 2.0,
+          "content_single_main": -1.0
+        }
+      },
+      {
+        "rule_id": "prefer_single_for_single_segment",
+        "condition": {
+          "segment_count_max": 1
+        },
+        "layout_scores": {
+          "content_single_main": 1.5
+        }
+      },
+      {
+        "rule_id": "visual_focus_prefers_single",
+        "condition": {
+          "dominant_type_in": [ "image", "chart", "table" ],
+          "segment_count_max": 1
+        },
+        "layout_scores": {
+          "content_single_main": 1.0
+        }
+      },
+      {
+        "rule_id": "penalize_two_column_if_text_too_long",
+        "condition": {
+          "segment_count_min": 2,
+          "total_chars_min": 1200
+        },
+        "layout_scores": {
+          "content_two_column": -1.5
+        }
+      }
+    ],
+    "default_layout_scores": {
+      "content_single_main": 0.5,
+      "content_two_column": 0.5
+    }
+  },
+
+  "validation": {
+    "slide_rules": [
+      {
+        "rule_id": "title_must_exist",
+        "description": "Every slide must have a non-empty title_main text.",
+        "severity": "error",
+        "check": {
+          "slot_id": "title_main",
+          "condition": "not_empty"
+        }
+      },
+      {
+        "rule_id": "respect_slot_char_limits",
+        "description": "Total characters per slot must not exceed slot.max_chars.",
+        "severity": "warning",
+        "check": { "type": "per_slot_max_chars" }
+      },
+      {
+        "rule_id": "content_slots_must_match_layout",
+        "description": "Only slots defined for the chosen layout may be filled.",
+        "severity": "error",
+        "check": { "type": "no_content_in_unused_slots" }
+      },
+      {
+        "rule_id": "font_size_consistency",
+        "description": "Check that actual PPT font sizes match typographic SSOT.",
+        "severity": "warning",
+        "check": { "type": "font_sizes_match_typography" }
+      }
+    ],
+    "fallback": {
+      "on_conflict": "choose_layout_with_higher_score_or_content_single_main",
+      "on_validation_error": "log_error_and_keep_layout",
+      "default_layout_id": "content_single_main"
+    }
+  }
+}

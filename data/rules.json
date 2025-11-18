@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0",
+  "rules_version": "2025-11-17",
+  "template_id": "koerber_2025",
+  "template_version": "Koerber-2025.1",
+  "extends": {
+    "ssot_file": "ssot/maschinenlesbares_SSOT.json",
+    "merge_strategy": "append_nonconflicting",
+    "avoid_existing_rule_ids": [
+      "prefer_two_column_for_comparison",
+      "prefer_single_for_single_segment",
+      "visual_focus_prefers_single",
+      "penalize_two_column_if_text_too_long"
+    ]
+  },
+  "evaluation_order": [
+    "hard_constraints",
+    "capacity_checks",
+    "accessibility",
+    "scoring",
+    "tiebreakers",
+    "qa"
+  ],
+  "layout_ids": ["content_single_main", "content_two_column"],
+  "slot_ids": [
+    "title_main","subtitle_main",
+    "content_main","content_left","content_right",
+    "footer_logo","footer_text","footer_date","footer_page_number"
+  ],
+
+  "hard_constraints": [
+    {
+      "id": "HARD-SLOTS-DEFINED",
+      "description": "Only fill slots that exist in the selected layout.",
+      "when": { "always": true },
+      "check": "slots_subset_of_layout",
+      "severity": "error",
+      "action": "exclude_layout"
+    },
+    {
+      "id": "HARD-TITLE-REQUIRED",
+      "description": "Every slide must have a non-empty title_main.",
+      "when": { "always": true },
+      "check": { "slot": "title_main", "condition": "not_empty" },
+      "severity": "error",
+      "action": "reject_slide"
+    },
+    {
+      "id": "HARD-INTENT-LAYOUT-COMPAT",
+      "description": "Section intent must use a Section Header layout (not provided by this template).",
+      "when": { "slide.intent": "section" },
+      "check": { "layout_family_not_in": ["content_single_main","content_two_column"] },
+      "severity": "error",
+      "action": "no_selection"
+    }
+  ],
+
+  "capacity_checks": [
+    {
+      "id": "CAP-BULLET-LEN",
+      "description": "Bullets: max 7 items, each <= 12 words.",
+      "targets": ["content_main","content_left","content_right"],
+      "limits": { "max_items": 7, "max_words_per_item": 12 },
+      "severity": "warn",
+      "on_violation": "truncate_or_split"
+    },
+    {
+      "id": "CAP-CHAR-LIMITS",
+      "description": "Respect per-slot character limits if provided by layout metadata.",
+      "targets": ["title_main","subtitle_main","content_main","content_left","content_right","footer_text"],
+      "check": "enforce_slot_max_chars",
+      "severity": "warn",
+      "on_violation": "truncate_with_ellipsis"
+    },
+    {
+      "id": "CAP-LINE-LENGTH",
+      "description": "Target 50-75 characters per line; warn if outside.",
+      "targets": ["content_main","content_left","content_right"],
+      "limits": { "min_cpl": 50, "max_cpl": 75 },
+      "severity": "warn",
+      "on_violation": "suggest_reflow"
+    }
+  ],
+
+  "accessibility": {
+    "contrast": {
+      "id": "A11Y-CONTRAST",
+      "description": "WCAG contrast: normal text >=4.5:1, large text >=3:1; graphics/UI >=3:1.",
+      "thresholds": { "normal_text": 4.5, "large_text": 3.0, "graphics_ui": 3.0 },
+      "severity": "error",
+      "on_violation": "auto_adjust_to_brand_palette"
+    },
+    "no_color_alone": {
+      "id": "A11Y-NO-COLOR-ALONE",
+      "description": "Color not sole carrier of information; require labels/texture.",
+      "severity": "warn",
+      "on_violation": "add_labels"
+    },
+    "unique_titles": {
+      "id": "A11Y-UNIQUE-TITLE",
+      "description": "Every slide must have a unique programmatic title (may be visually hidden).",
+      "severity": "error",
+      "on_violation": "append_disambiguator"
+    },
+    "reading_order": {
+      "id": "A11Y-READ-ORDER",
+      "description": "Ensure reading order matches visual hierarchy (Title→Body→Media→Footer).",
+      "severity": "error",
+      "on_violation": "reorder_selection_pane"
+    },
+    "alt_text": {
+      "id": "A11Y-ALT-TEXT",
+      "description": "Non-decorative images/charts require alt text; complex charts: Notes as long description.",
+      "severity": "error",
+      "on_violation": "require_alt_or_notes"
+    }
+  },
+
+  "typography": {
+    "id": "TYPO-DEFAULTS",
+    "font_families": ["Arial"],
+    "min_title_pt": 24,
+    "min_body_pt": 16,
+    "alignment": "left",
+    "max_font_families": 2,
+    "baseline_grid": true
+  },
+
+  "charts": {
+    "picker": [
+      { "id": "CHART-TIME", "if": { "purpose": "time_series" }, "then": ["line","area"], "penalize": ["pie","donut"] },
+      { "id": "CHART-CATEGORY", "if": { "purpose": "category_compare" }, "then": ["bar","column"] },
+      { "id": "CHART-PART-TO-WHOLE", "if": { "purpose": "part_to_whole", "categories_max": 6 }, "then": ["pie","donut"], "else_then": ["stacked_bar","treemap"] },
+      { "id": "CHART-RELATION", "if": { "purpose": "relationship" }, "then": ["scatter","bubble"] },
+      { "id": "CHART-DISTR", "if": { "purpose": "distribution" }, "then": ["histogram","boxplot","violin"] }
+    ],
+    "style": {
+      "tufte": { "remove_chartjunk": true, "zero_baseline_for_bars": true, "direct_labeling_preferred": true }
+    }
+  },
+
+  "images": {
+    "ratio_tolerance": 0.10,
+    "on_ratio_mismatch": "auto_crop_or_switch_layout",
+    "require_alt_text": true
+  },
+
+  "scoring": {
+    "defaults": { "content_single_main": 0.5, "content_two_column": 0.5 },
+    "rules": [
+      {
+        "id": "SCORE-VISUAL-FOCUS-SINGLE",
+        "description": "Dominant image/chart/table & 1 segment → single content.",
+        "if": { "dominant_type_in": ["image","chart","table"], "segment_count_max": 1 },
+        "effects": { "content_single_main": 1 }
+      },
+      {
+        "id": "SCORE-SEGMENT-ONE-SINGLE",
+        "description": "1 Segment → prefer single column.",
+        "if": { "segment_count_max": 1 },
+        "effects": { "content_single_main": 1.5 }
+      },
+      {
+        "id": "SCORE-COMPARISON-2COL",
+        "description": "2 Segmente & relation in {comparison,problem_solution,before_after,pros_cons} → two column.",
+        "if": { "segment_count": 2, "relation_type_in": ["comparison","problem_solution","before_after","pros_cons"] },
+        "effects": { "content_two_column": 2, "content_single_main": -1 }
+      },
+      {
+        "id": "SCORE-TEXT-TOO-LONG-PENALIZE-2COL",
+        "description": "≥2 Segmente & total_chars≥1200 → two column -1.5.",
+        "if": { "segment_count_min": 2, "total_chars_min": 1200 },
+        "effects": { "content_two_column": -1.5 }
+      }
+    ]
+  },
+
+  "tiebreakers": [
+    { "id": "TB-READABILITY", "description": "Prefer shorter effective line length & more whitespace.", "priority": 1 },
+    { "id": "TB-FLOW", "description": "Prefer same layout family as neighbors.", "priority": 2 },
+    { "id": "TB-INTEGRITY", "description": "Prefer chart integrity (no 3D/effects).", "priority": 3 }
+  ],
+
+  "qa": [
+    { "id": "QA-TITLE-UNIQUE", "severity": "error", "check": "unique_title" },
+    { "id": "QA-READ-ORDER", "severity": "error", "check": "reading_order_matches" },
+    { "id": "QA-CONTRAST-AA", "severity": "error", "check": "contrast_thresholds" },
+    { "id": "QA-EMPTY-REQUIRED-SLOT", "severity": "error", "check": "no_empty_required_slots" },
+    { "id": "QA-LINE-LENGTH", "severity": "warn", "check": "line_length", "params": { "min": 50, "max": 75 } }
+  ],
+
+  "function": {
+    "name": "select_layout",
+    "language": "json-declarative",
+    "description": "Deterministisch: Hard→Capacity→Accessibility→Scoring→Tiebreakers→QA",
+    "inputs": ["slide","layouts","rules"],
+    "outputs": ["selected_layout","candidates","applied_rules","violations"],
+    "steps": [
+      { "step": "filter_layouts", "by": "hard_constraints" },
+      { "step": "apply_checks", "checks": "capacity_checks", "collect": "warnings" },
+      { "step": "apply_checks", "checks": "accessibility", "abort_on": "error" },
+      { "step": "score", "use": "scoring.defaults", "rules": "scoring.rules" },
+      { "step": "tiebreak", "by": "tiebreakers" },
+      { "step": "qa", "checks": "qa", "severity_threshold": "error" }
+    ]
+  }
+}
