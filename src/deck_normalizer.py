@@ -61,9 +61,13 @@ def normalize_deck(deck: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Normalisiert deck_semantic.json für layout_planner_agent.py")
-    ap.add_argument("--in", dest="inp", required=True, help="Input-Deck (z. B. out/deck_semantic.json)")
-    ap.add_argument("--out", dest="out", required=True, help="Output-Deck (z. B. out/deck_semantic_norm.json)")
+    ap = argparse.ArgumentParser(
+        description="Normalisiert deck_semantic.json für layout_planner_agent.py"
+    )
+    ap.add_argument("--in", dest="inp", required=True,
+                    help="Input-Deck (z. B. out/deck_semantic.json)")
+    ap.add_argument("--out", dest="out", required=True,
+                    help="Output-Deck (z. B. out/deck_semantic_norm.json)")
     args = ap.parse_args()
 
     with open(args.inp, "r", encoding="utf-8") as f:

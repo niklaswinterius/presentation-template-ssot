@@ -3,7 +3,7 @@
 content_raw_parser.py
 Parst content_raw.md und erzeugt deck_semantic.json für die Layoutentscheidung.
 CLI:
-  python content_raw_parser.py --in content\content_raw.md --out deck_semantic.json
+  python content_raw_parser.py --in content/content_raw.md --out deck_semantic.json
 """
 import re, json, argparse
 from typing import List, Dict, Any
